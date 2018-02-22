@@ -1,2 +1,2 @@
 # Appointment-Helper
-Helps to add/edit appointments
+Helps to add/edit appointments.
