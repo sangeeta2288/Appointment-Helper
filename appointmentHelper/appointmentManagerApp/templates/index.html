@@ -23,17 +23,20 @@
           $('#search-txt').click(function(){
             //make ajax call and show table data
             var searchText = $('#apt-txt').val();
-            if (!searchText || searchText === ''){
-                return;
+            if (!searchText){
+                searchText = '%empty%';
             }
+            $('#appointmentData tr').detach();
             $.ajax({url: `getAppointment/${searchText}`, success: function(result){
                 var res = $.parseJSON( result );
                 $(function() {
-                    var trHTML = '';
+                    var trHTML = '<thead><tr><th scope="col">#</th><th scope="col">Date</th><th scope="col">Time</th><th scope="col">Description</th></tr></thead>'
+                    var count=1;
                     $.each(res, function(i, item) {
                     var date = item.fields.appointment_date_time.substr(0, 10);
-                    var time = item.fields.appointment_date_time.substr(11, item.fields.appointment_date_time.length-11);
-                    trHTML += '<tr><td>' + date + '</td><td>' + time + '</td><td>' + item.fields.description_text + '</td></tr>';
+                    var time = item.fields.appointment_date_time.substr(11, item.fields.appointment_date_time.length-12);
+                    trHTML += '<tr><td>' + count + '</td><td>' + date + '</td><td>' + time + '</td><td>' + item.fields.description_text + '</td></tr>';
+                    count = count + 1;
                    });
                    $('#appointmentData').append(trHTML);
                    $('#appointmentData').removeClass('invisible');
@@ -69,13 +72,13 @@
                 <div class="form-group row">
                     <label for="time-input" class="col-2 col-form-label">Time :</label>
                     <div class="col-10">
-                        <input type="time" class="col-2 col-form-label" id="time-input" value="13:45:00">
+                        <input type="time" name="time-input" class="col-2" id="time-input" value="13:45:00">
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-sm-4">
                         <label for="desc-input" style='margin-left:16px'>Description :</label>
-                        <input class="form-control" style='margin-left:16px' id="desc-input" type="text">
+                        <input class="form-control" name="desc-input" style='margin-left:16px' id="desc-input" type="text">
                     </div>
                 </div>
             </div>
@@ -88,12 +91,13 @@
       </div>
       <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" id="search-txt" title="Search">SEARCH</button>
       </div>
-        <table id="appointmentData" class="invisible" style="border:1px solid;width:100%">
-            <th>
+        <table id="appointmentData" class="table table-dark invisible"  style="border:1px solid;width:100%">
+
+            <!--<tr>
                 <td>Date</td>
                 <td>Time</td>
                 <td>Description</td>
-            </th>
+            </tr>-->
         </table>
     </div>
 
